@@ -17,9 +17,10 @@ import ru.sanddev.weathertgbot.BotObjects.BotChat;
 public class Bot extends TelegramLongPollingBot {
 
     @Getter
-    private BotConfig config;
+    private final BotConfig config;
 
     public Bot(BotConfig config) {
+        super(config.getToken());
         this.config = config;
     }
 
@@ -27,12 +28,7 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotUsername() {
         return config.getUsername();
     }
-
-    @Override
-    public String getBotToken() {
-        return config.getToken();
-    }
-
+    
     @Override
     public void onUpdateReceived(Update update) {
         log.debug("Got updates");

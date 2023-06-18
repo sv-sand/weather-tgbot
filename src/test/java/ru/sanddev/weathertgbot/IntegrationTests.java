@@ -119,7 +119,7 @@ class IntegrationTests {
 
 		SendMessage message = botGetAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().get(), "СПРАВКА");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "СПРАВКА");
 	}
 
 	@Test
@@ -146,7 +146,7 @@ class IntegrationTests {
 		message = botGetAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().get(), "Я поддерживаю следующие языки:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Я поддерживаю следующие языки:");
 
 		botSend(chat, "ru");
 		message = botGetAnswer();
@@ -159,7 +159,7 @@ class IntegrationTests {
 		message = botGetAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().get(), "Я поддерживаю следующие языки:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Я поддерживаю следующие языки:");
 
 		botSend(chat, "en");
 		message = botGetAnswer();
@@ -184,7 +184,7 @@ class IntegrationTests {
 		message = botGetAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().get(), "I'm support follow languages:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
 
 		botSend(chat, "en");
 		message = botGetAnswer();
@@ -197,7 +197,7 @@ class IntegrationTests {
 		message = botGetAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().get(), "I'm support follow languages:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
 
 		botSend(chat, "ru");
 		message = botGetAnswer();
@@ -222,15 +222,14 @@ class IntegrationTests {
 	}
 
 	private Chat newChat(String id, String name) {
-		Chat chat = new Chat(
+		return new Chat(
 				Long.valueOf(id), "", "", "", "", name,
 				new ChatPhoto(), "", "", new Message(), "",
 				false, new ChatPermissions(), 0, "", 0L, new ChatLocation(),
 				0, false, false, false,
-				false, false, false, new ArrayList<String>(),
+				false, false, false, new ArrayList<>(),
 				"", false, false
 		);
-		return chat;
 	}
 
 	private void botSend(Chat chat, String messageText) {

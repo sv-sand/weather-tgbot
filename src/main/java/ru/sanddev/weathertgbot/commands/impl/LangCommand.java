@@ -1,6 +1,5 @@
 package ru.sanddev.weathertgbot.commands.impl;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.sanddev.weathertgbot.AppWeatherBot;
 import ru.sanddev.weathertgbot.BotObjects.BotChat;
 import ru.sanddev.weathertgbot.BotObjects.BotLanguage;

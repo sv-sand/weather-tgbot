@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.sanddev.weathertgbot.AppWeatherBot;
-import ru.sanddev.weathertgbot.BotObjects.BotChat;
 
 /**
  * @author sand <sve.snd@gmail.com>

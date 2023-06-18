@@ -14,12 +14,10 @@ public class BotLanguage {
 
     public final static Code DEFAULT_LANGUAGE_CODE = Code.ru;
 
-    private Locale locale;
-
     private ResourceBundle dialogs;
 
     @Getter
-    private Code code;
+    private final Code code;
 
     public BotLanguage(Code code) {
         this.code = code;
@@ -27,7 +25,7 @@ public class BotLanguage {
     }
 
     private void init() {
-        locale = new Locale(code.toString());
+        Locale locale = new Locale(code.toString());
         dialogs = ResourceBundle.getBundle("dialogs", locale);
     }
 
@@ -42,6 +40,6 @@ public class BotLanguage {
 
     public enum Code {
         en,
-        ru;
+        ru
     }
 }
