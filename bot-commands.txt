@@ -1,0 +1,3 @@
+start - Greeting
+help - Help
+lang - Change language

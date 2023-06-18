@@ -5,6 +5,9 @@
 /db/
 /target/
 
+# Secrets of this project
+bot.properties
+
 # Compiled class file
 *.class
 
