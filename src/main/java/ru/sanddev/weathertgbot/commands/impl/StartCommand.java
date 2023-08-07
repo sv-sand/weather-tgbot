@@ -10,22 +10,23 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class StartCommand extends BaseCommand {
 
-    public StartCommand() {
-        super();
+    public StartCommand(BotChat chat) {
+        super(chat);
+        this.name = "/start";
     }
 
     @Override
-    public void send(BotChat chat) {
+    public void process() {
         if (chat.isNew())
-            sendingMessageText = chat.getDialog("hello_nice_to_meet_you", chat.getUser().getName());
+            sendMessage(chat.getDialog("hello_nice_to_meet_you", chat.getUser().getName()));
         else
-            sendingMessageText = chat.getDialog("welcome_back", chat.getUser().getName());
+            sendMessage(chat.getDialog("welcome_back", chat.getUser().getName()));
 
-        super.send(chat);
+        super.process();
     }
 
     @Override
-    public void answer(BotChat chat, String messageText) {
-        super.answer(chat, messageText);
+    public void processAnswer(String receivedMessageText) {
+        super.processAnswer(receivedMessageText);
     }
 }

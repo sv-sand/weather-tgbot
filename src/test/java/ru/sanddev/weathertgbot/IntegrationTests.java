@@ -210,6 +210,27 @@ class IntegrationTests {
 		assertEquals("ru", user.getLanguageCode());
 	}
 
+	@Test
+	public void breakCommandEn() {
+		saveUser("1", "sand", BotLanguage.Code.en);
+
+		Chat chat = newChat("1", "sand");
+		SendMessage message;
+
+		// Change language en -> en
+		botSend(chat, "/lang");
+		message = botGetAnswer();
+
+		assertEquals(message.getChatId(), chat.getId().toString());
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
+
+		botSend(chat, "/break");
+		message = botGetAnswer();
+
+		assertEquals(message.getChatId(), chat.getId().toString());
+		assertEquals(message.getText(), "Command /lang was broke");
+	}
+
 	// Service methods
 
 	private User saveUser(String id, String name, BotLanguage.Code langCode) {

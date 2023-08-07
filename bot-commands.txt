@@ -1,3 +1,5 @@
 start - Greeting
 help - Help
 lang - Change language
+city - Set city
+weather - Load current weather

@@ -22,6 +22,7 @@ public class User {
 
     private String name;
     private String languageCode;
+    private String city;
 
     public User() {
         this.id = "";

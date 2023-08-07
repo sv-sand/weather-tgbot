@@ -14,6 +14,8 @@ public class BotLanguage {
 
     public final static Code DEFAULT_LANGUAGE_CODE = Code.ru;
 
+    @Getter
+    private Locale locale;
     private ResourceBundle dialogs;
 
     @Getter
@@ -25,7 +27,7 @@ public class BotLanguage {
     }
 
     private void init() {
-        Locale locale = new Locale(code.toString());
+        locale = new Locale(code.toString());
         dialogs = ResourceBundle.getBundle("dialogs", locale);
     }
 

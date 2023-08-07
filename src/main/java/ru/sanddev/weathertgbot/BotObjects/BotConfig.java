@@ -1,4 +1,4 @@
-package ru.sanddev.weathertgbot;
+package ru.sanddev.weathertgbot.BotObjects;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,4 +20,7 @@ public class BotConfig {
 
     @Value("${bot.token}")
     private String token;
+
+    @Value("${weather.apiid}")
+    private String apiId;
 }

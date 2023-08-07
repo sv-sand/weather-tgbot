@@ -12,24 +12,34 @@ import ru.sanddev.weathertgbot.BotObjects.BotMessageSender;
 
 public abstract class BaseCommand implements Command {
 
+    protected String name;
+
     protected final BotMessageSender service;
+    protected final BotChat chat;
 
-    protected String sendingMessageText;
-
-    public BaseCommand() {
-        service = AppWeatherBot.getContext().getBotMessageSender();
+    public BaseCommand(BotChat chat) {
+        this.name = "";
+        this.service = AppWeatherBot.getContext().getBotMessageSender();
+        this.chat = chat;
     }
 
     @Override
-    public void send(BotChat chat) {
-        SendMessage message = new SendMessage(chat.getUser().getId(), sendingMessageText);
-        service.setMessage(message);
-        service.send();
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void answer(BotChat chat, String messageText) {
-        SendMessage message = new SendMessage(chat.getUser().getId(), sendingMessageText);
+    public void process() {
+
+    }
+
+    @Override
+    public void processAnswer(String receivedMessageText) {
+
+    }
+
+    protected void sendMessage(String text) {
+        SendMessage message = new SendMessage(chat.getUser().getId(), text);
         service.setMessage(message);
         service.send();
     }

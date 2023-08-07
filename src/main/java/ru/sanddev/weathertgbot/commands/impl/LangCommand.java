@@ -12,34 +12,35 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class LangCommand extends BaseCommand {
 
-    public LangCommand() {
-        super();
+    public LangCommand(BotChat chat) {
+        super(chat);
+        this.name = "/lang";
     }
 
     @Override
-    public void send(BotChat chat) {
+    public void process() {
         AppWeatherBot.getContext().getCommandsService().getActiveCommands().put(chat, this);
-        sendingMessageText = chat.getDialog("support_languages");
-        super.send(chat);
+        sendMessage(chat.getDialog("support_languages"));
+        super.process();
     }
 
     @Override
-    public void answer(BotChat chat, String messageText) {
+    public void processAnswer(String receivedMessageText) {
         BotLanguage.Code code;
 
         try {
-            code = BotLanguage.Code.valueOf(messageText);
+            code = BotLanguage.Code.valueOf(receivedMessageText);
 
             AppWeatherBot.getContext().getCommandsService().getActiveCommands().remove(chat);
             chat.setLanguage(code);
 
-            sendingMessageText = chat.getDialog("language_changed");
+            sendMessage(chat.getDialog("language_changed"));
 
         } catch (IllegalArgumentException e) {
-            sendingMessageText = chat.getDialog("cant_recognize_lang_code", messageText) + "\n" +
-                    chat.getDialog("support_languages");
+            sendMessage(chat.getDialog("cant_recognize_lang_code", receivedMessageText) + "\n" +
+                    chat.getDialog("support_languages"));
         }
 
-        super.answer(chat, messageText);
+        super.processAnswer(receivedMessageText);
     }
 }

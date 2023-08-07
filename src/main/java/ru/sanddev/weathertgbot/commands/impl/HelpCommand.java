@@ -10,18 +10,19 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class HelpCommand extends BaseCommand {
 
-    public HelpCommand() {
-        super();
+    public HelpCommand(BotChat chat) {
+        super(chat);
+        this.name = "/help";
     }
 
     @Override
-    public void send(BotChat chat) {
-        sendingMessageText = chat.getDialog("help");
-        super.send(chat);
+    public void process() {
+        sendMessage(chat.getDialog("help"));
+        super.process();
     }
 
     @Override
-    public void answer(BotChat chat, String messageText) {
-        super.answer(chat, messageText);
+    public void processAnswer(String receivedMessageText) {
+        super.processAnswer(receivedMessageText);
     }
 }

@@ -1,23 +1,29 @@
 package ru.sanddev.weathertgbot.commands.impl;
 
+import ru.sanddev.weathertgbot.AppWeatherBot;
 import ru.sanddev.weathertgbot.BotObjects.BotChat;
 import ru.sanddev.weathertgbot.commands.BaseCommand;
+import ru.sanddev.weathertgbot.commands.Command;
 
 /**
  * @author sand <sve.snd@gmail.com>
  * @since 31.05.2023
  */
 
-public class UndefinedCommand extends BaseCommand {
+public class BreakCommand extends BaseCommand {
 
-    public UndefinedCommand(BotChat chat) {
+    public BreakCommand(BotChat chat) {
         super(chat);
-        this.name = "/undefined";
+        this.name = "/break";
     }
 
     @Override
     public void process() {
-        sendMessage(chat.getDialog("command_not_recognized"));
+        Command command = AppWeatherBot.getContext().getCommandsService().getActiveCommands().remove(chat);
+        if (command != null) {
+            sendMessage(chat.getDialog("command_was_broke", command.getName()));
+        }
+
         super.process();
     }
 
