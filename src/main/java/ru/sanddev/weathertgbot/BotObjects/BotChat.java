@@ -22,27 +22,36 @@ public class BotChat {
     @Getter
     private boolean isNew;
 
-    private BotLanguage lang;
+    @Getter
+    private BotLanguage language;
 
     public BotChat(Chat chat) {
         readUser(chat);
 
         var code = BotLanguage.Code.valueOf(user.getLanguageCode());
-        lang = new BotLanguage(code);
+        language = new BotLanguage(code);
     }
 
     public String getDialog(String key, Object... arg) {
-        return lang.getDialog(key, arg);
+        return language.getDialog(key, arg);
     }
 
     public void setLanguage(BotLanguage.Code code) {
-        if (code == lang.getCode())
+        if (code == language.getCode())
             return;
 
         log.info(String.format("Change language to %s", code.toString()));
 
-        lang = new BotLanguage(code);
+        language = new BotLanguage(code);
         user.setLanguageCode(code.toString());
+        AppWeatherBot.getContext().userRepository
+                .save(user);
+    }
+
+    public void setCity(String city) {
+        log.info(String.format("Change city to %s", city));
+
+        user.setCity(city);
         AppWeatherBot.getContext().userRepository
                 .save(user);
     }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.sanddev.weathertgbot.BotObjects.BotChat;
+import ru.sanddev.weathertgbot.BotObjects.BotConfig;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -33,13 +34,10 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         log.debug("Got updates");
 
-        if (!update.hasMessage())
+        if (!update.hasMessage() | !update.getMessage().hasText())
             return;
 
         BotChat chat = new BotChat(update.getMessage().getChat());
-
-        if (!update.getMessage().hasText())
-            return;
 
         String messageText = update.getMessage().getText();
 
