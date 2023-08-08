@@ -1,6 +1,7 @@
 package ru.sanddev.weathertgbot.commands;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.sanddev.weathertgbot.AppWeatherBot;
 import ru.sanddev.weathertgbot.BotObjects.BotChat;
 import ru.sanddev.weathertgbot.BotObjects.BotMessageSender;
@@ -12,20 +13,12 @@ import ru.sanddev.weathertgbot.BotObjects.BotMessageSender;
 
 public abstract class BaseCommand implements Command {
 
-    protected String name;
-
     protected final BotMessageSender service;
     protected final BotChat chat;
 
     public BaseCommand(BotChat chat) {
-        this.name = "";
         this.service = AppWeatherBot.getContext().getBotMessageSender();
         this.chat = chat;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -40,6 +33,13 @@ public abstract class BaseCommand implements Command {
 
     protected void sendMessage(String text) {
         SendMessage message = new SendMessage(chat.getUser().getId(), text);
+        service.setMessage(message);
+        service.send();
+    }
+
+    protected void sendMessage(String text, InlineKeyboardMarkup keyboard) {
+        SendMessage message = new SendMessage(chat.getUser().getId(), text);
+        message.setReplyMarkup(keyboard);
         service.setMessage(message);
         service.send();
     }

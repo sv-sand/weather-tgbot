@@ -11,9 +11,15 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class CityCommand extends BaseCommand {
 
+    public static final String ID = "/city";
+
     public CityCommand(BotChat chat) {
         super(chat);
-        this.name = "/city";
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     @Override

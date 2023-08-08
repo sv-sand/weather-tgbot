@@ -10,9 +10,15 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class UndefinedCommand extends BaseCommand {
 
+    public static final String ID = "/undefined";
+
     public UndefinedCommand(BotChat chat) {
         super(chat);
-        this.name = "/undefined";
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     @Override

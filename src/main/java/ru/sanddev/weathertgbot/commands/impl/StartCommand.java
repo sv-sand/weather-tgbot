@@ -10,9 +10,15 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class StartCommand extends BaseCommand {
 
+    public static final String ID = "/start";
+
     public StartCommand(BotChat chat) {
         super(chat);
-        this.name = "/start";
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     @Override

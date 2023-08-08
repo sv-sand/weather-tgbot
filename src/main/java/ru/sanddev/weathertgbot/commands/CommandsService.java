@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import ru.sanddev.weathertgbot.BotObjects.BotChat;
-import ru.sanddev.weathertgbot.commands.impl.UndefinedCommand;
+import ru.sanddev.weathertgbot.commands.impl.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class CommandsService {
 
     @Getter
-    private Map<BotChat, Command> activeCommands;
+    private final Map<BotChat, Command> activeCommands;
 
     private Map<String, String> commandCollection;
 
@@ -32,12 +32,12 @@ public class CommandsService {
 
     private void initCommandCollection() {
         commandCollection = new HashMap<>();
-        commandCollection.put("/start", "StartCommand");
-        commandCollection.put("/help", "HelpCommand");
-        commandCollection.put("/break", "BreakCommand");
-        commandCollection.put("/lang", "LangCommand");
-        commandCollection.put("/city", "CityCommand");
-        commandCollection.put("/weather", "WeatherCommand");
+        commandCollection.put(StartCommand.ID, StartCommand.class.getName());
+        commandCollection.put(HelpCommand.ID, HelpCommand.class.getName());
+        commandCollection.put(BreakCommand.ID, BreakCommand.class.getName());
+        commandCollection.put(LangCommand.ID, LangCommand.class.getName());
+        commandCollection.put(CityCommand.ID, CityCommand.class.getName());
+        commandCollection.put(WeatherCommand.ID, WeatherCommand.class.getName());
     }
 
     public void processCommand(BotChat chat, String messageText) {
@@ -73,13 +73,10 @@ public class CommandsService {
     }
 
     private Command newCommand(String className, BotChat chat) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        String classPath = "ru.sanddev.weathertgbot.commands.impl.";
-
-        Class<?> clazz = Class.forName(classPath + className);
+        Class<?> clazz = Class.forName(className);
         Constructor constructor = clazz.getConstructor(chat.getClass());
-        Command command = (Command) constructor.newInstance(chat);
 
-        return command;
+        return (Command) constructor.newInstance(chat);
     }
 
     private boolean isAnswerExpecting(BotChat chat) {

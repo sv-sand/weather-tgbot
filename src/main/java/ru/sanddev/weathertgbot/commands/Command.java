@@ -2,7 +2,7 @@ package ru.sanddev.weathertgbot.commands;
 
 public interface Command {
 
-    String getName();
+    String getId();
 
     void process();
     void processAnswer(String messageText);

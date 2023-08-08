@@ -10,9 +10,15 @@ import ru.sanddev.weathertgbot.commands.BaseCommand;
 
 public class HelpCommand extends BaseCommand {
 
+    public static final String ID = "/help";
+
     public HelpCommand(BotChat chat) {
         super(chat);
-        this.name = "/help";
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     @Override

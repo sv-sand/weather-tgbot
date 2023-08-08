@@ -12,16 +12,22 @@ import ru.sanddev.weathertgbot.commands.Command;
 
 public class BreakCommand extends BaseCommand {
 
+    public static final String ID = "/break";
+
     public BreakCommand(BotChat chat) {
         super(chat);
-        this.name = "/break";
+    }
+
+    @Override
+    public String getId() {
+        return ID;
     }
 
     @Override
     public void process() {
         Command command = AppWeatherBot.getContext().getCommandsService().getActiveCommands().remove(chat);
         if (command != null) {
-            sendMessage(chat.getDialog("command_was_broke", command.getName()));
+            sendMessage(chat.getDialog("command_was_broke", command.getId()));
         }
 
         super.process();
