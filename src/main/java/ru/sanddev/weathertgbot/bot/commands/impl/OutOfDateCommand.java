@@ -1,18 +1,18 @@
-package ru.sanddev.weathertgbot.commands.impl;
+package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.BotObjects.BotChat;
-import ru.sanddev.weathertgbot.commands.BaseCommand;
+import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
  * @author sand <sve.snd@gmail.com>
  * @since 31.05.2023
  */
 
-public class HelpCommand extends BaseCommand {
+public class OutOfDateCommand extends BaseCommand {
 
-    public static final String ID = "/help";
+    public static final String ID = "/outofdate";
 
-    public HelpCommand(BotChat chat) {
+    public OutOfDateCommand(BotChat chat) {
         super(chat);
     }
 
@@ -23,7 +23,7 @@ public class HelpCommand extends BaseCommand {
 
     @Override
     public void process() {
-        sendMessage(chat.getDialog("help"));
+        sendMessage(chat.getDialog("command_out_of_date"));
         super.process();
     }
 

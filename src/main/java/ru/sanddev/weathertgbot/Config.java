@@ -1,4 +1,4 @@
-package ru.sanddev.weathertgbot.BotObjects;
+package ru.sanddev.weathertgbot;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @Getter
 @PropertySource("bot.properties")
-public class BotConfig {
+public class Config {
 
     @Value("${bot.username}")
     private String username;

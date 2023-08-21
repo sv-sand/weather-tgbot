@@ -1,8 +1,8 @@
-package ru.sanddev.weathertgbot.commands.impl;
+package ru.sanddev.weathertgbot.bot.commands.impl;
 
 import ru.sanddev.weathertgbot.AppWeatherBot;
-import ru.sanddev.weathertgbot.BotObjects.BotChat;
-import ru.sanddev.weathertgbot.commands.BaseCommand;
+import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -24,13 +24,13 @@ public class CityCommand extends BaseCommand {
 
     @Override
     public void process() {
-        AppWeatherBot.getContext().getCommandsService().getActiveCommands().put(chat, this);
+        AppWeatherBot.getContext().getCommandsService().getCommandsAwaitingResponse().put(chat, this);
         sendMessage(chat.getDialog("type_city"));
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        AppWeatherBot.getContext().getCommandsService().getActiveCommands().remove(chat);
+        AppWeatherBot.getContext().getCommandsService().getCommandsAwaitingResponse().remove(chat);
         chat.setCity(receivedMessageText);
 
         sendMessage(chat.getDialog("city_changed"));

@@ -13,8 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.sanddev.weathertgbot.BotObjects.BotLanguage;
-import ru.sanddev.weathertgbot.BotObjects.BotMessageSender;
+import ru.sanddev.weathertgbot.bot.*;
 import ru.sanddev.weathertgbot.db.entities.User;
 
 import java.util.ArrayList;
@@ -57,112 +56,112 @@ class IntegrationTests {
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/start");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Привет sand, приятно познакомиться!");
 	}
 
 	@Test
 	public void startCommandRu() {
-		saveUser("1", "sand", BotLanguage.Code.ru);
+		saveUser("1", "sand", LanguageCode.ru);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/start");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Рад видеть вас снова, sand");
 	}
 
 	@Test
 	public void startCommandEn() {
-		saveUser("1", "sand", BotLanguage.Code.en);
+		saveUser("1", "sand", LanguageCode.en);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/start");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Welcome back, sand");
 	}
 
 	@Test
 	public void undefinedCommandRu() {
-		saveUser("1", "sand", BotLanguage.Code.ru);
+		saveUser("1", "sand", LanguageCode.ru);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/undefined");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Команда не поддерживается");
 	}
 
 	@Test
 	public void undefinedCommandEn() {
-		saveUser("1", "sand", BotLanguage.Code.en);
+		saveUser("1", "sand", LanguageCode.en);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/undefined");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Command not recognized");
 	}
 
 	@Test
 	public void helpCommandRu() {
-		saveUser("1", "sand", BotLanguage.Code.ru);
+		saveUser("1", "sand", LanguageCode.ru);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/help");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText().lines().findFirst().orElseThrow(), "СПРАВКА");
 	}
 
 	@Test
 	public void helpCommandEn() {
-		saveUser("1", "sand", BotLanguage.Code.en);
+		saveUser("1", "sand", LanguageCode.en);
 
 		Chat chat = newChat("1", "sand");
 		botSend(chat, "/help");
 
-		SendMessage message = botGetAnswer();
+		SendMessage message = botAnswer();
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText().lines().findFirst().get(), "HELP");
 	}
 
 	@Test
 	public void langCommandRu() {
-		saveUser("1", "sand", BotLanguage.Code.ru);
+		saveUser("1", "sand", LanguageCode.ru);
 
 		Chat chat = newChat("1", "sand");
 		SendMessage message;
 
 		// Change language ru -> ru
 		botSend(chat, "/lang");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Я поддерживаю следующие языки:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Пожалуйста, выберите язык");
 
 		botSend(chat, "ru");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Язык успешно изменен");
 
 		// Change language ru -> en
 		botSend(chat, "/lang");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Я поддерживаю следующие языки:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Пожалуйста, выберите язык");
 
 		botSend(chat, "en");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Language was changed");
@@ -174,33 +173,33 @@ class IntegrationTests {
 
 	@Test
 	public void langCommandEn() {
-		saveUser("1", "sand", BotLanguage.Code.en);
+		saveUser("1", "sand", LanguageCode.en);
 
 		Chat chat = newChat("1", "sand");
 		SendMessage message;
 
 		// Change language en -> en
 		botSend(chat, "/lang");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Please select language");
 
 		botSend(chat, "en");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Language was changed");
 
 		// Change language en -> ru
 		botSend(chat, "/lang");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Please select language");
 
 		botSend(chat, "ru");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
 		assertEquals(message.getText(), "Язык успешно изменен");
@@ -212,28 +211,28 @@ class IntegrationTests {
 
 	@Test
 	public void breakCommandEn() {
-		saveUser("1", "sand", BotLanguage.Code.en);
+		saveUser("1", "sand", LanguageCode.en);
 
 		Chat chat = newChat("1", "sand");
 		SendMessage message;
 
 		// Change language en -> en
 		botSend(chat, "/lang");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText().lines().findFirst().orElseThrow(), "I'm support follow languages:");
+		assertEquals(message.getText().lines().findFirst().orElseThrow(), "Please select language");
 
 		botSend(chat, "/break");
-		message = botGetAnswer();
+		message = botAnswer();
 
 		assertEquals(message.getChatId(), chat.getId().toString());
-		assertEquals(message.getText(), "Command /lang was broke");
+		assertEquals(message.getText(), "Command was broke");
 	}
 
 	// Service methods
 
-	private User saveUser(String id, String name, BotLanguage.Code langCode) {
+	private User saveUser(String id, String name, LanguageCode langCode) {
 		User user = new User();
 		user.setId(id);
 		user.setName(name);
@@ -264,7 +263,7 @@ class IntegrationTests {
 		context.getBot().onUpdateReceived(update);
 	}
 
-	private SendMessage botGetAnswer() {
+	private SendMessage botAnswer() {
 		return context.getBotMessageSender().getMessage();
 	}
 }

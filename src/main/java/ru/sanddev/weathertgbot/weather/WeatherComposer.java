@@ -1,4 +1,4 @@
-package ru.sanddev.weathertgbot;
+package ru.sanddev.weathertgbot.weather;
 
 import lombok.extern.log4j.Log4j;
 import ru.sanddev.WeatherClient.objects.WeatherDailyForecast;
@@ -32,14 +32,14 @@ public class WeatherComposer {
         if (weather.isEmpty())
             return result.toString();
 
-        result.append(
-                String.format(dialogs.getString("there_is_weather_today"), df.format(weather.getDate()))
-        );
-        result.append(lineBreak);
+        String text;
 
-        result.append(
-                String.format(dialogs.getString("city"), weather.getCity().getName())
+        text = String.format(
+                dialogs.getString("there_is_weather_today"),
+                df.format(weather.getDate()),
+                weather.getCity().getName()
         );
+        result.append("<b>" + text + "</b>");
         result.append(lineBreak);
 
         result.append(
@@ -48,7 +48,7 @@ public class WeatherComposer {
         result.append(lineBreak);
 
         result.append(
-                String.format(dialogs.getString("visibility"), weather.getVisibility())
+                String.format(dialogs.getString("wind_speed"), weather.getWind().getSpeed())
         );
         result.append(lineBreak);
 
@@ -56,10 +56,6 @@ public class WeatherComposer {
                 String.format(dialogs.getString("pressure"), weather.getMain().getPressure())
         );
         result.append(lineBreak);
-
-        result.append(
-                String.format(dialogs.getString("wind_speed"), weather.getWind().getSpeed())
-        );
 
         log.debug("Weather today representation done");
 

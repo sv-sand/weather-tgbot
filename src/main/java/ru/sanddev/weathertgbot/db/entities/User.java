@@ -2,10 +2,10 @@ package ru.sanddev.weathertgbot.db.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ru.sanddev.weathertgbot.BotObjects.BotLanguage;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -24,10 +24,17 @@ public class User {
     private String languageCode;
     private String city;
 
+    @Transient
+    @Getter @Setter
+    private boolean isNew;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ScheduledNotification notification;
+
     public User() {
         this.id = "";
         this.name = "";
-        this.languageCode = BotLanguage.DEFAULT_LANGUAGE_CODE.toString();
+        this.languageCode = "ru";
     }
 
     @Override

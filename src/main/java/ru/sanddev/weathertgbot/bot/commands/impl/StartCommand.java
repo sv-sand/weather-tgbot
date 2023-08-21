@@ -1,7 +1,7 @@
-package ru.sanddev.weathertgbot.commands.impl;
+package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.BotObjects.BotChat;
-import ru.sanddev.weathertgbot.commands.BaseCommand;
+import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -23,7 +23,7 @@ public class StartCommand extends BaseCommand {
 
     @Override
     public void process() {
-        if (chat.isNew())
+        if (chat.getUser().isNew())
             sendMessage(chat.getDialog("hello_nice_to_meet_you", chat.getUser().getName()));
         else
             sendMessage(chat.getDialog("welcome_back", chat.getUser().getName()));

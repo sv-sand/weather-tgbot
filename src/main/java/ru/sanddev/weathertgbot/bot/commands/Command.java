@@ -1,4 +1,4 @@
-package ru.sanddev.weathertgbot.commands;
+package ru.sanddev.weathertgbot.bot.commands;
 
 public interface Command {
 
