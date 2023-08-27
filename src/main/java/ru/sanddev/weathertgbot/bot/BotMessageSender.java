@@ -39,5 +39,6 @@ public class BotMessageSender {
 
     public void send(SendMessage message) {
         this.message = message;
+        send();
     }
 }

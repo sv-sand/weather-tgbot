@@ -26,9 +26,11 @@ public class NotificationCommand extends BaseCommand {
 
     private Integer hour;
     private Integer minute;
+    private String city;
 
     private State state;
     enum State {
+        CITY_INPUT,
         HOUR_INPUT,
         MINUTE_INPUT,
         FINISH
@@ -47,48 +49,81 @@ public class NotificationCommand extends BaseCommand {
 
     @Override
     public void process() {
-        waitResponse();
 
-        KeyboardManager kbManager = new KeyboardManager();
-        for (String hour: availableHours)
-            kbManager.addButton(hour, hour);
+        if (chat.getUser().getCity().isEmpty())
+            requestCity();
+        else
+            requestHour();
 
-        state = State.HOUR_INPUT;
-
-        sendMessage(chat.getDialog("select_hour_notify"), kbManager.getKeyboard());
         super.process();
     }
 
     @Override
-    public void processAnswer(String receivedMessageText) {
-
-        Integer value;
-        try {
-            value = Integer.valueOf(receivedMessageText);
-        } catch (NumberFormatException e) {
-            log.warn("Not a integer value " + receivedMessageText);
-            sendMessage(chat.getDialog("not_a_valid_integer_value"));
-            return;
-        }
+    public void processAnswer(String answerText) {
 
         switch (state) {
+            case CITY_INPUT:
+                onCityInput(answerText);
+                break;
             case HOUR_INPUT:
-                processHourInput(value);
+                onHourInput(answerText);
                 break;
             case MINUTE_INPUT:
-                processMinuteInput(value);
-                finishCommand();
+                onMinuteInput(answerText);
                 break;
             default:
-                String text = "Error E01: unexpected state of command";
+                String text = "Error C001: unexpected state of command " + ID;
                 log.error(text);
                 sendMessage(text);
         }
 
-        super.processAnswer(receivedMessageText);
+        super.processAnswer(answerText);
     }
 
-    private void processHourInput(Integer value) {
+    private void requestCity() {
+        sendMessage(chat.getDialog("type_city"));
+        state = State.CITY_INPUT;
+        waitResponse();
+    }
+
+    private void requestHour() {
+        KeyboardManager kbManager = new KeyboardManager();
+        for (String hour: availableHours)
+            kbManager.addButton(hour, hour);
+
+        sendMessage(chat.getDialog("select_hour_notify"), kbManager.getKeyboard());
+
+        state = State.HOUR_INPUT;
+        waitResponse();
+    }
+
+    private void requestMinutes() {
+        KeyboardManager kbManager = new KeyboardManager();
+        for (String minute: availableMinutes)
+            kbManager.addButton(minute, minute);
+
+        sendMessage(chat.getDialog("select_minute_notify"), kbManager.getKeyboard());
+
+        state = State.MINUTE_INPUT;
+        waitResponse();
+    }
+
+    private void onCityInput(String answerText) {
+        this.city = answerText;
+        requestHour();
+    }
+
+    private void onHourInput(String answerText) {
+
+        int value;
+        try {
+            value = Integer.parseInt(answerText);
+        } catch (NumberFormatException e) {
+            log.warn("Not a integer value " + answerText);
+            sendMessage(chat.getDialog("not_a_valid_integer_value"));
+            return;
+        }
+
         if (value < 0 || value > 24) {
             log.warn("Not a valid hour value " + value);
             sendMessage(chat.getDialog("not_a_valid_hour_value"));
@@ -97,16 +132,20 @@ public class NotificationCommand extends BaseCommand {
         log.debug(String.format("Value %s accepted as hour", value));
 
         hour = value;
-        state = State.MINUTE_INPUT;
-
-        KeyboardManager kbManager = new KeyboardManager();
-        for (String minute: availableMinutes)
-            kbManager.addButton(minute, minute);
-
-        sendMessage(chat.getDialog("select_minute_notify"), kbManager.getKeyboard());
+        requestMinutes();
     }
 
-    private void processMinuteInput(Integer value) {
+    private void onMinuteInput(String answerText) {
+
+        int value;
+        try {
+            value = Integer.parseInt(answerText);
+        } catch (NumberFormatException e) {
+            log.warn("Not a integer value " + answerText);
+            sendMessage(chat.getDialog("not_a_valid_integer_value"));
+            return;
+        }
+
         if (value < 0 || value > 60) {
             log.warn("Not a valid minute value " + value);
             sendMessage(chat.getDialog("not_a_valid_minute_value"));
@@ -115,21 +154,25 @@ public class NotificationCommand extends BaseCommand {
         log.debug(String.format("Value %s accepted as minute", value));
 
         minute = value;
-        state = State.FINISH;
+        finishCommand();
     }
 
     private void finishCommand() {
+        if(!chat.getUser().getCity().equals(city))
+            chat.setCity(city);
+
         ScheduledNotification notification = chat.getUser().getNotification();
-        if (notification == null) {
+        if (notification == null || notification.isEmpty()) {
             notification = new ScheduledNotification();
             notification.setUser(chat.getUser());
         }
 
         notification.setTime(new Time(hour, minute, 0));
-
         repo.save(notification);
 
-        stopWaitingResponse();
         sendMessage(chat.getDialog("notify_was_created"));
+
+        state = State.FINISH;
+        stopWaitingResponse();
     }
 }

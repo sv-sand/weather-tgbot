@@ -20,9 +20,17 @@ public class ScheduledNotification {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     private Time time;
+
+    public boolean isEmpty() {
+        return id == 0;
+    }
+
+    public String toString() {
+        return String.format("Notification{id='%s', time='%s'}", id, time);
+    }
 }

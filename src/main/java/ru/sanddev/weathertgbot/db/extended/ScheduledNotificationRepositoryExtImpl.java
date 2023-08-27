@@ -20,10 +20,11 @@ public class ScheduledNotificationRepositoryExtImpl implements ScheduledNotifica
     @PersistenceContext
     private EntityManager em;
 
-    public List<ScheduledNotification> findAllByTime(Time time) {
-        String sql = "select * from scheduled_notifications where time <> ?";
+    public List<ScheduledNotification> findAllByTime(Time start, Time end) {
+        String sql = "select * from scheduled_notifications where time between ? and ?";
         Query query = em.createNativeQuery(sql, ScheduledNotification.class)
-                .setParameter(1, time);
+                .setParameter(1, start)
+                .setParameter(2, end);
         return query.getResultList();
     }
 }

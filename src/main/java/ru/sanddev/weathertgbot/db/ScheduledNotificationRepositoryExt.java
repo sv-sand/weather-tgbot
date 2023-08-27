@@ -13,5 +13,5 @@ import java.util.List;
 
 @Repository
 public interface ScheduledNotificationRepositoryExt {
-    List<ScheduledNotification> findAllByTime(Time time);
+    List<ScheduledNotification> findAllByTime(Time start, Time end);
 }

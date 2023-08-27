@@ -3,9 +3,8 @@ package ru.sanddev.weathertgbot.bot;
 import lombok.extern.log4j.Log4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.bot.commands.Command;
+import ru.sanddev.weathertgbot.bot.commands.impl.WeatherCommand;
 import ru.sanddev.weathertgbot.db.ScheduledNotificationRepository;
 import ru.sanddev.weathertgbot.db.entities.ScheduledNotification;
 
@@ -21,36 +20,35 @@ import java.util.List;
 
 @Log4j
 @Component
-public class SendNotification {
+public class NotificationService {
 
     private final ScheduledNotificationRepository repo;
     private final BotMessageSender sender;
 
-    SendNotification() {
-        this.repo = AppWeatherBot.getContext().getScheduledNotificationRepository();
-        this.sender = AppWeatherBot.getContext().getBotMessageSender();
+    public NotificationService(ScheduledNotificationRepository repo, BotMessageSender sender) {
+        this.repo = repo;
+        this.sender = sender;
     }
 
     @Scheduled(fixedRate = 60000)
     public void send() {
         log.info("Start notification scheduler");
 
-        List<ScheduledNotification> notifications = repo.findAllByTime(getCurrentTimeUTC());
+        List<ScheduledNotification> notifications = repo.findAllByTime(getStartTime(), getEndTime());
         for (ScheduledNotification notification: notifications) {
-            sendMessage(notification.getUser().getId(), "Test");
+            BotChat chat = new BotChat(notification.getUser());
+            Command command = new WeatherCommand(chat);
+            command.process();
         }
     }
 
-    private Time getCurrentTimeUTC() {
+    private Time getStartTime() {
         ZonedDateTime zdt = ZonedDateTime.now(ZoneOffset.UTC);
-        return new Time(zdt.getHour(), zdt.getMinute(), 0);
+        return new Time(0, zdt.getMinute(), 0);
     }
 
-    protected void sendMessage(String chatId, String text) {
-        SendMessage message = new SendMessage(chatId, text);
-        message.setParseMode(ParseMode.HTML);
-
-        sender.setMessage(message);
-        sender.send();
+    private Time getEndTime() {
+        ZonedDateTime zdt = ZonedDateTime.now(ZoneOffset.UTC);
+        return new Time(23, zdt.getMinute(), 59);
     }
 }

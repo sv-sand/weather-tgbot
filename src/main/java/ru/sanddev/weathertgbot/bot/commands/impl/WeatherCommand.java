@@ -32,13 +32,10 @@ public class WeatherCommand extends BaseCommand {
     public void process() {
 
         String city = chat.getUser().getCity();
-        if (city.isEmpty()) {
-            waitResponse();
-            sendMessage(chat.getDialog("type_city"));
-        }
-        else {
+        if (city.isEmpty())
+            requestCity();
+        else
             sendWeather(city);
-        }
 
         super.process();
     }
@@ -50,7 +47,12 @@ public class WeatherCommand extends BaseCommand {
         super.processAnswer(receivedMessageText);
     }
 
-    private void sendWeather(String city) {
+    private void requestCity() {
+        sendMessage(chat.getDialog("type_city"));
+        waitResponse();
+    }
+
+    public void sendWeather(String city) {
         String text = loadWeather(chat, city);
         sendMessage(text);
     }
