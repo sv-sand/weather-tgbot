@@ -16,7 +16,7 @@ import java.sql.Time;
  */
 
 @Log4j
-public class NotificationCommand extends BaseCommand {
+public class NotifyCommand extends BaseCommand {
 
     public static final String ID = "/notify";
 
@@ -36,7 +36,7 @@ public class NotificationCommand extends BaseCommand {
         FINISH
     }
 
-    public NotificationCommand(BotChat chat) {
+    public NotifyCommand(BotChat chat) {
         super(chat);
 
         repo = AppWeatherBot.getContext().getScheduledNotificationRepository();

@@ -38,7 +38,9 @@ public class CommandsService {
         commandCollection.put(LangCommand.ID, LangCommand.class.getName());
         commandCollection.put(CityCommand.ID, CityCommand.class.getName());
         commandCollection.put(WeatherCommand.ID, WeatherCommand.class.getName());
-        commandCollection.put(NotificationCommand.ID, NotificationCommand.class.getName());
+        commandCollection.put(NotifyCommand.ID, NotifyCommand.class.getName());
+        commandCollection.put(NotificationsCommand.ID, NotificationsCommand.class.getName());
+
     }
 
     // Incoming messages
@@ -86,16 +88,9 @@ public class CommandsService {
 
     public void processAnswer(BotChat chat, String messageText) {
 
-        if (!isAnswerExpecting(chat)) {
-            Command command = new OutOfDateCommand(chat);
-            log.error("Answer out of date recognized");
-            command.process();
-        }
-        else {
-            Command command = commandsAwaitingResponse.get(chat);
-            log.error(String.format("Answer by command %s recognized", command.getClass().toString()));
-            command.processAnswer(messageText);
-        }
+        Command command = commandsAwaitingResponse.get(chat);
+        log.error(String.format("Answer by command %s recognized", command.getClass().toString()));
+        command.processAnswer(messageText);
     }
 
     public boolean isAnswerExpecting(BotChat chat) {

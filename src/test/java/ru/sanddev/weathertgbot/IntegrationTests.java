@@ -13,7 +13,10 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.sanddev.weathertgbot.bot.*;
+import ru.sanddev.weathertgbot.bot.Bot;
+import ru.sanddev.weathertgbot.bot.BotInitializer;
+import ru.sanddev.weathertgbot.bot.BotMessageSender;
+import ru.sanddev.weathertgbot.bot.LanguageCode;
 import ru.sanddev.weathertgbot.db.entities.User;
 
 import java.util.ArrayList;
