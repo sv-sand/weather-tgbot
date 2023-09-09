@@ -1,5 +1,8 @@
 start - Greeting
 help - Help
 lang - Change language
-city - Set city
-weather - Load current weather
+city - Set your city
+weather - Load current weather in your city
+notify - Schedule weather notification
+notifications - My scheduled notifications
+break - Break last command
