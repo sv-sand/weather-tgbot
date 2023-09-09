@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.sanddev.weathertgbot.bot.Bot;
 import ru.sanddev.weathertgbot.bot.BotMessageSender;
 import ru.sanddev.weathertgbot.bot.commands.CommandsService;
-import ru.sanddev.weathertgbot.db.ScheduledNotificationRepository;
-import ru.sanddev.weathertgbot.db.UserRepository;
+import ru.sanddev.weathertgbot.db.DataBase;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -17,16 +16,13 @@ import ru.sanddev.weathertgbot.db.UserRepository;
 
 @Component
 @Getter @Setter
-public class AppContext {
-
-    @Autowired
-    public UserRepository userRepository;
-
-    @Autowired
-    public ScheduledNotificationRepository scheduledNotificationRepository;
+public class Context {
 
     @Autowired
     private Config config;
+
+    @Autowired
+    private DataBase db;
 
     @Autowired
     private CommandsService commandsService;
@@ -37,7 +33,7 @@ public class AppContext {
     @Autowired
     private BotMessageSender botMessageSender;
 
-    public AppContext() {
-        AppWeatherBot.setContext(this);
+    public Context() {
+        App.setContext(this);
     }
 }

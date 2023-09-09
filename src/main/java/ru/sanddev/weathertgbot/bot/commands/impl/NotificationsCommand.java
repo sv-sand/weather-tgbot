@@ -24,12 +24,10 @@ public class NotificationsCommand extends BaseCommand {
     @Override
     public void process() {
         sendMessage(getText());
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        super.processAnswer(receivedMessageText);
     }
 
     private String getText() {

@@ -2,9 +2,11 @@ package ru.sanddev.weathertgbot.db;
 
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.LanguageCode;
 import ru.sanddev.weathertgbot.db.entities.User;
+
+import java.util.NoSuchElementException;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -20,10 +22,13 @@ public class UserManager {
      * @return user which was read or register
      */
     public static User get(Chat chat) {
-        User user = read(chat.getId().toString());
+        User user;
 
-        if (user.isEmpty())
+        try {
+            user = read(chat.getId().toString());
+        } catch (NoSuchElementException e) {
             user = register(chat);
+        }
 
         return user;
     }
@@ -31,14 +36,15 @@ public class UserManager {
     /**
      * Read user from DB
      * @param chatId - id of user
+     * @throws NoSuchElementException – if no value is present
      * @return User which was read
      */
-    public static User read(String chatId) {
+    public static User read(String chatId) throws NoSuchElementException {
         log.debug("Read user from DB by ID=" + chatId);
 
-        return AppWeatherBot.getContext().userRepository
+        return App.getContext().getDb().getUserRepository()
                 .findById(chatId)
-                .orElse(new User());
+                .orElseThrow();
     }
 
     /**
@@ -55,7 +61,7 @@ public class UserManager {
         user.setLanguageCode(LanguageCode.DEFAULT.toString());
         user.setNew(true);
 
-        AppWeatherBot.getContext().userRepository
+        App.getContext().getDb().getUserRepository()
                 .save(user);
 
         return user;

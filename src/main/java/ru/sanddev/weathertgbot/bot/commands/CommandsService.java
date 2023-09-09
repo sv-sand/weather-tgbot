@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.BotChat;
 import ru.sanddev.weathertgbot.bot.commands.impl.*;
 
@@ -29,7 +29,7 @@ public class CommandsService {
     private final Map<String, String> commandCollection;
 
     public CommandsService() {
-        this.commandsAwaitingResponse = new HashMap<>();
+        commandsAwaitingResponse = new HashMap<>();
 
         commandCollection = new HashMap<>();
         commandCollection.put(StartCommand.ID, StartCommand.class.getName());
@@ -87,7 +87,6 @@ public class CommandsService {
     }
 
     public void processAnswer(BotChat chat, String messageText) {
-
         Command command = commandsAwaitingResponse.get(chat);
         log.error(String.format("Answer by command %s recognized", command.getClass().toString()));
         command.processAnswer(messageText);
@@ -103,7 +102,7 @@ public class CommandsService {
         SendMessage message = new SendMessage(chat.getUser().getId(), text);
         message.setParseMode(ParseMode.HTML);
 
-        AppWeatherBot.getContext().getBotMessageSender()
+        App.getContext().getBotMessageSender()
                 .send(message);
     }
 
@@ -112,7 +111,7 @@ public class CommandsService {
         message.setParseMode(ParseMode.HTML);
         message.setReplyMarkup(keyboard);
 
-        AppWeatherBot.getContext().getBotMessageSender()
+        App.getContext().getBotMessageSender()
                 .send(message);
     }
 }

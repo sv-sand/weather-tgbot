@@ -1,11 +1,10 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
 import lombok.extern.log4j.Log4j;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.BotChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 import ru.sanddev.weathertgbot.bot.commands.KeyboardManager;
-import ru.sanddev.weathertgbot.db.ScheduledNotificationRepository;
 import ru.sanddev.weathertgbot.db.entities.ScheduledNotification;
 
 import java.sql.Time;
@@ -20,7 +19,6 @@ public class NotifyCommand extends BaseCommand {
 
     public static final String ID = "/notify";
 
-    private final ScheduledNotificationRepository repo;
     private final String [] availableHours = {"6", "7", "8", "9", "10"};
     private final String [] availableMinutes = {"00", "10", "20", "30", "40", "50"};
 
@@ -38,8 +36,6 @@ public class NotifyCommand extends BaseCommand {
 
     public NotifyCommand(BotChat chat) {
         super(chat);
-
-        repo = AppWeatherBot.getContext().getScheduledNotificationRepository();
     }
 
     @Override
@@ -52,10 +48,10 @@ public class NotifyCommand extends BaseCommand {
 
         if (chat.getUser().getCity().isEmpty())
             requestCity();
-        else
+        else {
+            city = chat.getUser().getCity();
             requestHour();
-
-        super.process();
+        }
     }
 
     @Override
@@ -76,8 +72,6 @@ public class NotifyCommand extends BaseCommand {
                 log.error(text);
                 sendMessage(text);
         }
-
-        super.processAnswer(answerText);
     }
 
     private void requestCity() {
@@ -158,8 +152,7 @@ public class NotifyCommand extends BaseCommand {
     }
 
     private void finishCommand() {
-        if(!chat.getUser().getCity().equals(city))
-            chat.setCity(city);
+        chat.setCity(city);
 
         ScheduledNotification notification = chat.getUser().getNotification();
         if (notification == null || notification.isEmpty()) {
@@ -168,7 +161,8 @@ public class NotifyCommand extends BaseCommand {
         }
 
         notification.setTime(new Time(hour, minute, 0));
-        repo.save(notification);
+        App.getContext().getDb().getScheduledNotificationRepository()
+                .save(notification);
 
         sendMessage(chat.getDialog("notify_was_created"));
 

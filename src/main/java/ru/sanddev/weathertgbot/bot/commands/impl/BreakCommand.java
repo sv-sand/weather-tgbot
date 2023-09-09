@@ -1,6 +1,6 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.BotChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
@@ -24,14 +24,11 @@ public class BreakCommand extends BaseCommand {
 
     @Override
     public void process() {
-        AppWeatherBot.getContext().getCommandsService().getCommandsAwaitingResponse().remove(chat);
+        App.getContext().getCommandsService().getCommandsAwaitingResponse().remove(chat);
         sendMessage(chat.getDialog("command_was_broke"));
-
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        super.processAnswer(receivedMessageText);
     }
 }

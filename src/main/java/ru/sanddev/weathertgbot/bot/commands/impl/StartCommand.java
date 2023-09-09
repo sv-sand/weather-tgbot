@@ -27,12 +27,9 @@ public class StartCommand extends BaseCommand {
             sendMessage(chat.getDialog("hello_nice_to_meet_you", chat.getUser().getName()));
         else
             sendMessage(chat.getDialog("welcome_back", chat.getUser().getName()));
-
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        super.processAnswer(receivedMessageText);
     }
 }

@@ -1,11 +1,12 @@
 package ru.sanddev.weathertgbot.bot;
 
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.sanddev.weathertgbot.AppWeatherBot;
-import ru.sanddev.weathertgbot.bot.commands.CommandsService;
+import ru.sanddev.weathertgbot.App;
+import ru.sanddev.weathertgbot.Config;
 import ru.sanddev.weathertgbot.db.UserManager;
 import ru.sanddev.weathertgbot.db.entities.User;
 
@@ -18,19 +19,15 @@ import ru.sanddev.weathertgbot.db.entities.User;
 @Log4j
 public class Bot extends TelegramLongPollingBot {
 
-    private final String name;
-    private final CommandsService commandsService;
-
-    public Bot() {
-        super(AppWeatherBot.getContext().getConfig().getToken());
-
-        this.name = AppWeatherBot.getContext().getConfig().getUsername();
-        this.commandsService = AppWeatherBot.getContext().getCommandsService();
+    @Autowired
+    public Bot(Config config) {
+        super(config.getToken());
     }
 
     @Override
     public String getBotUsername() {
-        return name;
+        return App.getContext().getConfig()
+                .getUsername();
     }
     
     @Override
@@ -44,16 +41,18 @@ public class Bot extends TelegramLongPollingBot {
 
             log.info(String.format("From user %s message received: %s", chat.getUser(), messageText));
 
-            commandsService.processCommand(chat, messageText);
+            App.getContext().getCommandsService()
+                    .processCommand(chat, messageText);
 
         } else if (update.hasCallbackQuery()) {
             String messageText = update.getCallbackQuery().getData();
-            User user = UserManager.read(update.getCallbackQuery().getMessage().getChat().toString());
+            User user = UserManager.read(update.getCallbackQuery().getMessage().getChat().getId().toString());
             BotChat chat = new BotChat(user);
 
             log.info(String.format("From user %s callback received: %s", chat.getUser(), messageText));
 
-            commandsService.processAnswer(chat, messageText);
+            App.getContext().getCommandsService()
+                    .processAnswer(chat, messageText);
         }
     }
 }

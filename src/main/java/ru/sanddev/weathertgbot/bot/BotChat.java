@@ -3,7 +3,7 @@ package ru.sanddev.weathertgbot.bot;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.db.entities.User;
 
 import java.util.Locale;
@@ -39,7 +39,7 @@ public class BotChat {
 
         dialogService = new BotDialogService(code);
         user.setLanguageCode(code);
-        AppWeatherBot.getContext().userRepository
+        App.getContext().getDb().userRepository
                 .save(user);
     }
 
@@ -47,7 +47,7 @@ public class BotChat {
         log.info(String.format("Change city to %s", city));
 
         user.setCity(city);
-        AppWeatherBot.getContext().userRepository
+        App.getContext().getDb().userRepository
                 .save(user);
     }
 

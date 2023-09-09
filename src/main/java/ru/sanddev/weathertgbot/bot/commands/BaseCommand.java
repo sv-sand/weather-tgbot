@@ -1,7 +1,7 @@
 package ru.sanddev.weathertgbot.bot.commands;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.BotChat;
 
 /**
@@ -11,37 +11,29 @@ import ru.sanddev.weathertgbot.bot.BotChat;
 
 public abstract class BaseCommand implements Command {
 
-    protected final CommandsService service;
     protected final BotChat chat;
 
     public BaseCommand(BotChat chat) {
-        this.service = AppWeatherBot.getContext().getCommandsService();
         this.chat = chat;
     }
 
-    @Override
-    public void process() {
-
-    }
-
-    @Override
-    public void processAnswer(String receivedMessageText) {
-
-    }
-
     protected void sendMessage(String text) {
-        service.sendMessage(chat, text);
+        App.getContext().getCommandsService()
+                .sendMessage(chat, text);
     }
 
     protected void sendMessage(String text, InlineKeyboardMarkup keyboard) {
-        service.sendMessage(chat, text, keyboard);
+        App.getContext().getCommandsService()
+                .sendMessage(chat, text, keyboard);
     }
 
     protected void waitResponse() {
-        service.getCommandsAwaitingResponse().put(chat, this);
+        App.getContext().getCommandsService()
+                .getCommandsAwaitingResponse().put(chat, this);
     }
 
     protected void stopWaitingResponse() {
-        service.getCommandsAwaitingResponse().remove(chat, this);
+        App.getContext().getCommandsService()
+                .getCommandsAwaitingResponse().remove(chat, this);
     }
 }

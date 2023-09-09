@@ -24,11 +24,9 @@ public class UndefinedCommand extends BaseCommand {
     @Override
     public void process() {
         sendMessage(chat.getDialog("command_not_recognized"));
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        super.processAnswer(receivedMessageText);
     }
 }

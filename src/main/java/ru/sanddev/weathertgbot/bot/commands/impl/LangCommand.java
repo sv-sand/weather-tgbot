@@ -1,7 +1,6 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
 import ru.sanddev.weathertgbot.bot.BotChat;
-import ru.sanddev.weathertgbot.bot.LanguageCode;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 import ru.sanddev.weathertgbot.bot.commands.KeyboardManager;
 
@@ -32,7 +31,6 @@ public class LangCommand extends BaseCommand {
                 .addButton("русский", "ru");
 
         sendMessage(chat.getDialog("support_languages"), kbManager.getKeyboard());
-        super.process();
     }
 
     @Override
@@ -47,7 +45,5 @@ public class LangCommand extends BaseCommand {
             sendMessage(chat.getDialog("cant_recognize_lang_code", receivedMessageText) + "\n" +
                     chat.getDialog("support_languages"));
         }
-
-        super.processAnswer(receivedMessageText);
     }
 }

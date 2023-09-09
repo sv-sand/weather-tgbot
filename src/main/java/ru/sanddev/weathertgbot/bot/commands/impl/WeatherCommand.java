@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j;
 import ru.sanddev.WeatherClient.Exception.WeatherException;
 import ru.sanddev.WeatherClient.WeatherClient;
 import ru.sanddev.WeatherClient.objects.WeatherToday;
-import ru.sanddev.weathertgbot.AppWeatherBot;
+import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.bot.BotChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 import ru.sanddev.weathertgbot.weather.WeatherComposer;
@@ -36,15 +36,12 @@ public class WeatherCommand extends BaseCommand {
             requestCity();
         else
             sendWeather(city);
-
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
         stopWaitingResponse();
         sendWeather(receivedMessageText);
-        super.processAnswer(receivedMessageText);
     }
 
     private void requestCity() {
@@ -59,7 +56,7 @@ public class WeatherCommand extends BaseCommand {
 
     private String loadWeather(BotChat chat, String city) {
 
-        String apiId = AppWeatherBot.getContext().getConfig().getApiId();
+        String apiId = App.getContext().getConfig().getApiId();
         WeatherClient client = new WeatherClient(apiId, city);
 
         try {

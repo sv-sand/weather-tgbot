@@ -24,11 +24,9 @@ public class HelpCommand extends BaseCommand {
     @Override
     public void process() {
         sendMessage(chat.getDialog("help"));
-        super.process();
     }
 
     @Override
     public void processAnswer(String receivedMessageText) {
-        super.processAnswer(receivedMessageText);
     }
 }
