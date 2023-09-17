@@ -1,6 +1,6 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
@@ -12,7 +12,7 @@ public class HelpCommand extends BaseCommand {
 
     public static final String ID = "/help";
 
-    public HelpCommand(BotChat chat) {
+    public HelpCommand(TgChat chat) {
         super(chat);
     }
 

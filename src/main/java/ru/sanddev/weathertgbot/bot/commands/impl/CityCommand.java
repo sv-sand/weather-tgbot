@@ -1,7 +1,7 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
@@ -13,7 +13,7 @@ public class CityCommand extends BaseCommand {
 
     public static final String ID = "/city";
 
-    public CityCommand(BotChat chat) {
+    public CityCommand(TgChat chat) {
         super(chat);
     }
 

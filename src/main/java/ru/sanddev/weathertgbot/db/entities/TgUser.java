@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity(name = "users")
 @Data
 @EqualsAndHashCode (of = "id")
-public class User {
+public class TgUser {
 
     @Id
     private String id;
@@ -31,10 +31,11 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ScheduledNotification notification;
 
-    public User() {
+    public TgUser() {
         this.id = "";
         this.name = "";
         this.languageCode = "ru";
+        this.city = "";
     }
 
     @Override

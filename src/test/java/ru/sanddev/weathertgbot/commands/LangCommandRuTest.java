@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.BaseCommandTest;
 import ru.sanddev.weathertgbot.bot.LanguageCode;
-import ru.sanddev.weathertgbot.db.entities.User;
+import ru.sanddev.weathertgbot.db.entities.TgUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -49,7 +49,7 @@ public class LangCommandRuTest extends BaseCommandTest {
         assertEquals(message.getChatId(), chat.getId().toString());
         assertEquals(message.getText(), "Language was changed");
 
-        User user = App.getContext().getDb().userRepository
+        TgUser user = App.getContext().getDb().userRepository
                 .findById(chat.getId().toString())
                 .orElseThrow();
         assertEquals("en", user.getLanguageCode());

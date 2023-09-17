@@ -1,6 +1,6 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 import ru.sanddev.weathertgbot.bot.commands.KeyboardManager;
 
@@ -13,7 +13,7 @@ public class LangCommand extends BaseCommand {
 
     public static final String ID = "/lang";
 
-    public LangCommand(BotChat chat) {
+    public LangCommand(TgChat chat) {
         super(chat);
     }
 

@@ -39,7 +39,7 @@ public class NotificationService {
                 .findAllByTime(startTimeInterval, endTimeInterval);
 
         for (ScheduledNotification notification: notifications) {
-            BotChat chat = new BotChat(notification.getUser());
+            TgChat chat = new TgChat(notification.getUser());
             Command command = new WeatherCommand(chat);
 
             send(command);

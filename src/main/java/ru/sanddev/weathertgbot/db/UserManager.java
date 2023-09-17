@@ -1,10 +1,9 @@
 package ru.sanddev.weathertgbot.db;
 
 import lombok.extern.log4j.Log4j;
-import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.User;
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.bot.LanguageCode;
-import ru.sanddev.weathertgbot.db.entities.User;
+import ru.sanddev.weathertgbot.db.entities.TgUser;
 
 import java.util.NoSuchElementException;
 
@@ -18,52 +17,52 @@ public class UserManager {
 
     /**
      * Read user from DB or register
-     * @param chat - Telegram chat
+     * @param user - Telegram user
      * @return user which was read or register
      */
-    public static User get(Chat chat) {
-        User user;
+    public static TgUser get(User user) {
+        TgUser tgUser;
 
         try {
-            user = read(chat.getId().toString());
+            tgUser = read(user.getId().toString());
         } catch (NoSuchElementException e) {
-            user = register(chat);
+            tgUser = register(user);
         }
 
-        return user;
+        return tgUser;
     }
 
     /**
      * Read user from DB
-     * @param chatId - id of user
+     * @param userId - id of user
      * @throws NoSuchElementException – if no value is present
      * @return User which was read
      */
-    public static User read(String chatId) throws NoSuchElementException {
-        log.debug("Read user from DB by ID=" + chatId);
+    public static TgUser read(String userId) throws NoSuchElementException {
+        log.debug("Read user from DB by ID=" + userId);
 
         return App.getContext().getDb().getUserRepository()
-                .findById(chatId)
+                .findById(userId)
                 .orElseThrow();
     }
 
     /**
      * Write new user to DB
-     * @param chat - Telegram chat
+     * @param user - Telegram user
      * @return new registered user
      */
-    public static User register(Chat chat) {
-        log.debug("New user registration with ID=" + chat.getId());
+    public static TgUser register(User user) {
+        log.debug("New user registration with ID=" + user.getId());
 
-        User user = new User();
-        user.setId(chat.getId().toString());
-        user.setName(chat.getUserName());
-        user.setLanguageCode(LanguageCode.DEFAULT.toString());
-        user.setNew(true);
+        TgUser tgUser = new TgUser();
+        tgUser.setId(user.getId().toString());
+        tgUser.setName(user.getUserName());
+        tgUser.setLanguageCode(user.getLanguageCode());
+        tgUser.setNew(true);
 
         App.getContext().getDb().getUserRepository()
-                .save(user);
+                .save(tgUser);
 
-        return user;
+        return tgUser;
     }
 }
