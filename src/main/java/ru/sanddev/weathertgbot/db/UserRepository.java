@@ -2,7 +2,7 @@ package ru.sanddev.weathertgbot.db;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ru.sanddev.weathertgbot.db.entities.User;
+import ru.sanddev.weathertgbot.db.entities.TgUser;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -10,5 +10,5 @@ import ru.sanddev.weathertgbot.db.entities.User;
  */
 
 @Repository
-public interface UserRepository extends CrudRepository<User, String> {
+public interface UserRepository extends CrudRepository<TgUser, String> {
 }

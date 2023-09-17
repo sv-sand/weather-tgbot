@@ -2,7 +2,7 @@ package ru.sanddev.weathertgbot.bot.commands;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -11,9 +11,9 @@ import ru.sanddev.weathertgbot.bot.BotChat;
 
 public abstract class BaseCommand implements Command {
 
-    protected final BotChat chat;
+    protected final TgChat chat;
 
-    public BaseCommand(BotChat chat) {
+    public BaseCommand(TgChat chat) {
         this.chat = chat;
     }
 

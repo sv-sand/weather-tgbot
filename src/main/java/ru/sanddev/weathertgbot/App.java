@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +16,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Log4j
 @SpringBootApplication
 @EnableScheduling
+@PropertySource("bot.properties")
 public class App {
 
 	@Getter @Setter
@@ -31,5 +33,6 @@ public class App {
 	public void registerBot() throws TelegramApiException {
 		TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
 		api.registerBot(context.getBot());
+		context.getBot().applyMenu();
 	}
 }

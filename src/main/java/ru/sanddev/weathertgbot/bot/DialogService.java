@@ -10,7 +10,8 @@ import java.util.ResourceBundle;
  * @since 03.06.2023
  */
 
-public class BotDialogService {
+public class DialogService {
+    private final String RESOURCE_BUNDLE_NAME = "dialogs";
 
     @Getter
     private final Locale locale;
@@ -19,10 +20,10 @@ public class BotDialogService {
     @Getter
     private final LanguageCode code;
 
-    public BotDialogService(String code) throws IllegalArgumentException {
-        this.code = LanguageCode.valueOf(code);
-        this.locale = new Locale(code);
-        this.dialogs = ResourceBundle.getBundle("dialogs", locale);
+    public DialogService(String languageCode) throws IllegalArgumentException {
+        this.code = LanguageCode.valueOf(languageCode);
+        this.locale = new Locale(languageCode);
+        this.dialogs = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, locale);
     }
 
     public String getDialog(String key, Object... arg) {

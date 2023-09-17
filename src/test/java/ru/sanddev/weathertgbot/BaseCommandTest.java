@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.*;
 import ru.sanddev.weathertgbot.bot.LanguageCode;
-import ru.sanddev.weathertgbot.db.entities.User;
+import ru.sanddev.weathertgbot.db.entities.TgUser;
 
 import java.util.ArrayList;
 
@@ -47,8 +47,8 @@ public abstract class BaseCommandTest {
         App.getContext().getDb().getUserRepository().deleteAll();
     }
 
-    protected User saveUser(String id, String name, LanguageCode langCode) {
-        User user = new User();
+    protected TgUser saveUser(String id, String name, LanguageCode langCode) {
+        TgUser user = new TgUser();
         user.setId(id);
         user.setName(name);
         user.setLanguageCode(langCode.toString());
@@ -58,7 +58,7 @@ public abstract class BaseCommandTest {
 
     protected Chat newChat(String id, String name) {
         return new Chat(
-                Long.valueOf(id), "", "", "", "", name,
+                Long.valueOf(id), "", "", name, "", name,
                 new ChatPhoto(), "", "", new Message(), "",
                 false, new ChatPermissions(), 0, "", 0L, new ChatLocation(),
                 0, false, false, false,
@@ -68,14 +68,20 @@ public abstract class BaseCommandTest {
     }
 
     protected void botSend(Chat chat, String messageText) {
+        User user = new User(chat.getId(), chat.getFirstName(), false);
+        user.setUserName(chat.getUserName());
+        user.setLanguageCode(LanguageCode.DEFAULT.toString());
+
         Message message = new Message();
         message.setChat(chat);
         message.setText(messageText);
+        message.setFrom(user);
 
         Update update = new Update();
         update.setMessage(message);
 
-        App.getContext().getBot().onUpdateReceived(update);
+        App.getContext().getBot().
+                onUpdateReceived(update);
     }
 
     protected SendMessage botAnswer() {

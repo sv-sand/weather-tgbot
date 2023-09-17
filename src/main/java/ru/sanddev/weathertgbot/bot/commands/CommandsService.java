@@ -7,7 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.BotMenu;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.impl.*;
 
 import java.lang.reflect.Constructor;
@@ -25,31 +26,22 @@ import java.util.Map;
 public class CommandsService {
 
     @Getter
-    private final Map<BotChat, Command> commandsAwaitingResponse;
-    private final Map<String, String> commandCollection;
+    private final Map<TgChat, Command> commandsAwaitingResponse;
+    private final Map<String, Class<? extends BaseCommand>> availableCommands;
 
     public CommandsService() {
         commandsAwaitingResponse = new HashMap<>();
-
-        commandCollection = new HashMap<>();
-        commandCollection.put(StartCommand.ID, StartCommand.class.getName());
-        commandCollection.put(HelpCommand.ID, HelpCommand.class.getName());
-        commandCollection.put(BreakCommand.ID, BreakCommand.class.getName());
-        commandCollection.put(LangCommand.ID, LangCommand.class.getName());
-        commandCollection.put(CityCommand.ID, CityCommand.class.getName());
-        commandCollection.put(WeatherCommand.ID, WeatherCommand.class.getName());
-        commandCollection.put(NotifyCommand.ID, NotifyCommand.class.getName());
-        commandCollection.put(NotificationsCommand.ID, NotificationsCommand.class.getName());
-
+        availableCommands = new BotMenu()
+                .getAvailableCommands();
     }
 
     // Incoming messages
 
-    public void processCommand(BotChat chat, String messageText) {
+    public void processCommand(TgChat chat, String messageText) {
 
-        String commandClassName = commandCollection.get(messageText);
-        if (commandClassName != null) {
-            startNewCommand(commandClassName, chat);
+        Class commandClass = availableCommands.get(messageText);
+        if (commandClass != null) {
+            startNewCommand(commandClass, chat);
             return;
         }
 
@@ -63,42 +55,39 @@ public class CommandsService {
         command.process();
     }
 
-    private void startNewCommand(String className, BotChat chat) {
+    private void startNewCommand(Class clazz, TgChat chat) {
 
         Command command;
         try {
-            command = newCommand(className, chat);
-        } catch (ClassNotFoundException | NoSuchMethodException| InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            Constructor constructor = clazz.getConstructor(chat.getClass());
+            command = (Command) constructor.newInstance(chat);
+        } catch (
+                NoSuchMethodException | SecurityException| InstantiationException |
+                IllegalAccessException | InvocationTargetException |IllegalArgumentException e
+        ) {
             log.error(e.getLocalizedMessage());
             return;
         }
 
-        log.debug(className + " command recognized");
+        log.debug(command.getId() + " command recognized");
         commandsAwaitingResponse.remove(chat);
 
         command.process();
     }
 
-    private Command newCommand(String className, BotChat chat) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Class<?> clazz = Class.forName(className);
-        Constructor constructor = clazz.getConstructor(chat.getClass());
-
-        return (Command) constructor.newInstance(chat);
-    }
-
-    public void processAnswer(BotChat chat, String messageText) {
+    public void processAnswer(TgChat chat, String messageText) {
         Command command = commandsAwaitingResponse.get(chat);
         log.error(String.format("Answer by command %s recognized", command.getClass().toString()));
         command.processAnswer(messageText);
     }
 
-    public boolean isAnswerExpecting(BotChat chat) {
+    public boolean isAnswerExpecting(TgChat chat) {
         return commandsAwaitingResponse.containsKey(chat);
     }
 
     // Outgoing messages
 
-    protected void sendMessage(BotChat chat, String text) {
+    protected void sendMessage(TgChat chat, String text) {
         SendMessage message = new SendMessage(chat.getUser().getId(), text);
         message.setParseMode(ParseMode.HTML);
 
@@ -106,7 +95,7 @@ public class CommandsService {
                 .send(message);
     }
 
-    protected void sendMessage(BotChat chat, String text, InlineKeyboardMarkup keyboard) {
+    protected void sendMessage(TgChat chat, String text, InlineKeyboardMarkup keyboard) {
         SendMessage message = new SendMessage(chat.getUser().getId(), text);
         message.setParseMode(ParseMode.HTML);
         message.setReplyMarkup(keyboard);

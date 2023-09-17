@@ -1,6 +1,6 @@
 package ru.sanddev.weathertgbot.bot.commands.impl;
 
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 
 /**
@@ -12,7 +12,7 @@ public class NotificationsCommand extends BaseCommand {
 
     public static final String ID = "/notifications";
 
-    public NotificationsCommand(BotChat chat) {
+    public NotificationsCommand(TgChat chat) {
         super(chat);
     }
 

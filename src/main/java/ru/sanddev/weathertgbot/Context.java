@@ -8,6 +8,7 @@ import ru.sanddev.weathertgbot.bot.Bot;
 import ru.sanddev.weathertgbot.bot.BotMessageSender;
 import ru.sanddev.weathertgbot.bot.commands.CommandsService;
 import ru.sanddev.weathertgbot.db.DataBase;
+import ru.sanddev.weathertgbot.weather.WeatherService;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -19,13 +20,13 @@ import ru.sanddev.weathertgbot.db.DataBase;
 public class Context {
 
     @Autowired
-    private Config config;
-
-    @Autowired
     private DataBase db;
 
     @Autowired
     private CommandsService commandsService;
+
+    @Autowired
+    private WeatherService weatherService;
 
     @Autowired
     private Bot bot;

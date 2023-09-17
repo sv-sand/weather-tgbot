@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.db.entities.User;
+import ru.sanddev.weathertgbot.db.entities.TgUser;
 
 import java.util.Locale;
 
@@ -15,16 +15,16 @@ import java.util.Locale;
 
 @Log4j
 @EqualsAndHashCode (of = "user")
-public class BotChat {
+public class TgChat {
 
     @Getter
-    private final User user;
+    private final TgUser user;
 
-    private BotDialogService dialogService;
+    private DialogService dialogService;
 
-    public BotChat(User user) {
+    public TgChat(TgUser user) {
         this.user = user;
-        this.dialogService = new BotDialogService(user.getLanguageCode());
+        this.dialogService = new DialogService(user.getLanguageCode());
     }
 
     public String getDialog(String key, Object... arg) {
@@ -37,7 +37,7 @@ public class BotChat {
 
         log.info(String.format("Change language to %s", code));
 
-        dialogService = new BotDialogService(code);
+        dialogService = new DialogService(code);
         user.setLanguageCode(code);
         App.getContext().getDb().userRepository
                 .save(user);

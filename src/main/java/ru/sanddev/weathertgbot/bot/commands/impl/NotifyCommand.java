@@ -2,7 +2,7 @@ package ru.sanddev.weathertgbot.bot.commands.impl;
 
 import lombok.extern.log4j.Log4j;
 import ru.sanddev.weathertgbot.App;
-import ru.sanddev.weathertgbot.bot.BotChat;
+import ru.sanddev.weathertgbot.bot.TgChat;
 import ru.sanddev.weathertgbot.bot.commands.BaseCommand;
 import ru.sanddev.weathertgbot.bot.commands.KeyboardManager;
 import ru.sanddev.weathertgbot.db.entities.ScheduledNotification;
@@ -34,7 +34,7 @@ public class NotifyCommand extends BaseCommand {
         FINISH
     }
 
-    public NotifyCommand(BotChat chat) {
+    public NotifyCommand(TgChat chat) {
         super(chat);
     }
 
