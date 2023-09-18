@@ -6,8 +6,8 @@
 /target/
 
 # Secrets of this project
-application.properties
-bot.properties
+*/application.properties
+*/bot.properties
 
 # Compiled class file
 *.class
