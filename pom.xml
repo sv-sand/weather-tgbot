@@ -10,13 +10,20 @@
 	</parent>
 	<groupId>ru.sanddev</groupId>
 	<artifactId>weather-tgbot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>weather-tgbot</name>
 	<description>Telegram weather bot</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>ru.sanddev</groupId>
+			<artifactId>weather-client</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/weather-client.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
