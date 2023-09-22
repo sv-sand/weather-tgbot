@@ -21,8 +21,7 @@
 			<groupId>ru.sanddev</groupId>
 			<artifactId>weather-client</artifactId>
 			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/weather-client.jar</systemPath>
+	
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
