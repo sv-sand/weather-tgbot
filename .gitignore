@@ -4,6 +4,7 @@
 /out/
 /db/
 /target/
+/logs/
 
 # Secrets of this project
 application.properties
