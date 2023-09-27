@@ -31,7 +31,7 @@ public class TgChat {
         return dialogService.getDialog(key, arg);
     }
 
-    public void setLanguage(String code) throws IllegalArgumentException {
+    public void saveLanguage(String code) throws IllegalArgumentException {
         if (dialogService.getCode().toString().equals(code))
             return;
 
@@ -43,7 +43,7 @@ public class TgChat {
                 .save(user);
     }
 
-    public void setCity(String city) {
+    public void saveCity(String city) {
         log.info(String.format("Change city to %s", city));
 
         user.setCity(city);

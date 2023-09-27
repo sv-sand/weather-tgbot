@@ -152,7 +152,7 @@ public class NotifyCommand extends BaseCommand {
     }
 
     private void finishCommand() {
-        chat.setCity(city);
+        chat.saveCity(city);
 
         ScheduledNotification notification = chat.getUser().getNotification();
         if (notification == null || notification.isEmpty()) {

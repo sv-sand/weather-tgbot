@@ -12,26 +12,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 30.08.2023
  */
 
-public class BreakCommandRuTest extends BaseCommandTest {
+public class NotifyCommandTest extends BaseCommandTest {
 
     @Override
     public void test() {
-        saveUser("1", "sand", LanguageCode.ru);
+        deleteAllUsers();
+        createUser("1", "sand", LanguageCode.en, "Moscow");
 
         Chat chat = newChat("1", "sand");
         SendMessage message;
 
-        // Change language en -> en
-        botSend(chat, "/lang");
+        botSend(chat, "/notify");
         message = botAnswer();
-
         assertEquals(message.getChatId(), chat.getId().toString());
-        assertEquals(message.getText().lines().findFirst().orElseThrow(), "Пожалуйста, выберите язык");
+        assertEquals(message.getText(), "Select the hour of notification");
 
-        botSend(chat, "/break");
+        botSend(chat, "13");
         message = botAnswer();
-
         assertEquals(message.getChatId(), chat.getId().toString());
-        assertEquals(message.getText(), "Команда прервана");
+        assertEquals(message.getText(), "Select the minute of notification");
+
+        botSend(chat, "09");
+        message = botAnswer();
+        assertEquals(message.getChatId(), chat.getId().toString());
+        assertEquals(message.getText(), "Notification was created");
     }
 }

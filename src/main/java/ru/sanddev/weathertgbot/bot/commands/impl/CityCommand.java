@@ -31,7 +31,7 @@ public class CityCommand extends BaseCommand {
     @Override
     public void processAnswer(String receivedMessageText) {
         App.getContext().getCommandsService().getCommandsAwaitingResponse().remove(chat);
-        chat.setCity(receivedMessageText);
+        chat.saveCity(receivedMessageText);
 
         sendMessage(chat.getDialog("city_changed"));
     }
