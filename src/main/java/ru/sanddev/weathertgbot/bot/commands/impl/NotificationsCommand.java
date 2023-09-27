@@ -31,14 +31,17 @@ public class NotificationsCommand extends BaseCommand {
     }
 
     private String getText() {
+        if(chat.getUser().getNotification() == null || chat.getUser().getNotification().isEmpty())
+            return chat.getDialog("cant_find_notifications");
+
         return chat.getDialog("created_notifications") + getTextPositions();
     }
 
     private String getTextPositions() {
-        return "\n" +
-                chat.getDialog("created_notifications_position",
-                chat.getUser().getNotification().getTime().toString(),
-                chat.getUser().getCity()
-        );
+
+        return "\n" + chat.getDialog("created_notifications_position",
+                    chat.getUser().getNotification().getTime().toString(),
+                    chat.getUser().getCity()
+                );
     }
 }

@@ -47,13 +47,23 @@ public abstract class BaseCommandTest {
         App.getContext().getDb().getUserRepository().deleteAll();
     }
 
-    protected TgUser saveUser(String id, String name, LanguageCode langCode) {
+    protected TgUser createUser(String id, String name) {
+        return createUser(id, name, LanguageCode.en);
+    }
+
+    protected TgUser createUser(String id, String name, LanguageCode langCode) {
+        return createUser(id, name, langCode, "");
+    }
+
+    protected TgUser createUser(String id, String name, LanguageCode langCode, String city) {
         TgUser user = new TgUser();
         user.setId(id);
         user.setName(name);
         user.setLanguageCode(langCode.toString());
+        user.setCity(city);
 
-        return App.getContext().getDb().getUserRepository().save(user);
+        return App.getContext().getDb().getUserRepository()
+                .save(user);
     }
 
     protected Chat newChat(String id, String name) {

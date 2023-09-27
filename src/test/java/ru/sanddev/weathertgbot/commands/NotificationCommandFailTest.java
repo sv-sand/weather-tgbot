@@ -3,7 +3,6 @@ package ru.sanddev.weathertgbot.commands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import ru.sanddev.weathertgbot.BaseCommandTest;
-import ru.sanddev.weathertgbot.bot.LanguageCode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,17 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 30.08.2023
  */
 
-public class UndefinedCommandRuTest extends BaseCommandTest {
+public class NotificationCommandFailTest extends BaseCommandTest {
 
     @Override
     public void test() {
-        saveUser("1", "sand", LanguageCode.ru);
+        deleteAllUsers();
+        createUser("1", "sand");
 
         Chat chat = newChat("1", "sand");
-        botSend(chat, "/undefined");
+        botSend(chat, "/notifications");
 
         SendMessage message = botAnswer();
         assertEquals(message.getChatId(), chat.getId().toString());
-        assertEquals(message.getText(), "Команда не поддерживается");
+        assertEquals(message.getText().lines().findFirst().get(), "No one notification have been created yet");
     }
 }

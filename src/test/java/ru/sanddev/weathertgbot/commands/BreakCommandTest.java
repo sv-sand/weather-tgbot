@@ -12,17 +12,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 30.08.2023
  */
 
-public class HelpCommandEnTest extends BaseCommandTest {
+public class BreakCommandTest extends BaseCommandTest {
 
     @Override
     public void test() {
-        saveUser("1", "sand", LanguageCode.en);
+        createUser("1", "sand", LanguageCode.en);
 
         Chat chat = newChat("1", "sand");
-        botSend(chat, "/help");
+        SendMessage message;
 
-        SendMessage message = botAnswer();
+        // Change language en -> en
+        botSend(chat, "/lang");
+        message = botAnswer();
+
         assertEquals(message.getChatId(), chat.getId().toString());
-        assertEquals(message.getText().lines().findFirst().get(), "HELP");
+        assertEquals(message.getText().lines().findFirst().orElseThrow(), "Please select language");
+
+        botSend(chat, "/break");
+        message = botAnswer();
+
+        assertEquals(message.getChatId(), chat.getId().toString());
+        assertEquals(message.getText(), "Command was broke");
     }
 }

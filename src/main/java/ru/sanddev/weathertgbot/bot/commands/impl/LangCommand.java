@@ -36,7 +36,7 @@ public class LangCommand extends BaseCommand {
     @Override
     public void processAnswer(String receivedMessageText) {
         try {
-            chat.setLanguage(receivedMessageText);
+            chat.saveLanguage(receivedMessageText);
             stopWaitingResponse();
 
             sendMessage(chat.getDialog("language_changed"));
