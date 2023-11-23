@@ -15,8 +15,8 @@ This is a first bot on telegram messenger
 3. Clone this repo on your pc
 4. Run script lib/install.sh - weather-client module will be added in your local maven library
 5. Rename and fill properties files:
-- application-example.properties -> application.properties
-- bot-example.properties -> bot.properties
+- application.properties.example -> application.properties
+- bot.properties.example -> bot.properties
 6. Run script run.sh - bot will start
 
 ## Appendix
