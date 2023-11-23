@@ -1,12 +1,14 @@
 package ru.sanddev.weathertgbot.weather;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.sanddev.WeatherClient.Exception.WeatherException;
 import ru.sanddev.WeatherClient.WeatherClient;
 import ru.sanddev.WeatherClient.objects.WeatherToday;
+import ru.sanddev.WeatherClient.objects.nested.CityData;
 
 import java.util.Locale;
 
@@ -20,13 +22,20 @@ import java.util.Locale;
 public class WeatherService {
 
     @Getter
-    @Value("${weather.apiid}")
     private String apiId;
 
-    public String getWeather(String city, Locale locale) {
-        log.debug(String.format("Loading weather by today was started. Params: %s %s", city, locale.toString()));
+    @Getter @Setter
+    private WeatherClient client;
 
-        WeatherClient client = new WeatherClient(apiId, city);
+    public WeatherService(@Value("${weather.apiid}") String apiId) {
+        this.apiId = apiId;
+        client = new WeatherClient(apiId);
+    }
+
+    public String loadWeather(String city, Locale locale) {
+        log.info(String.format("Loading weather today was started. Params: %s, %s", city, locale.toString()));
+
+        client.setCity(city);
 
         try {
             client.setLocale(locale);
@@ -44,5 +53,20 @@ public class WeatherService {
         }
 
         return WeatherComposer.composeWeatherToday(weather, locale);
+    }
+
+    public CityData loadCity(String city) {
+        log.debug(String.format("Load city %s", city));
+        client.setCity(city);
+
+        CityData cityData;
+        try {
+            cityData = client.loadWeatherToday()
+                    .getCity();
+        } catch (WeatherException e) {
+            log.error(e.getLocalizedMessage(), e);
+            cityData = new CityData();
+        }
+        return cityData;
     }
 }

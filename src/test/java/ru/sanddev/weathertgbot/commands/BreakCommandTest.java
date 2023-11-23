@@ -3,7 +3,7 @@ package ru.sanddev.weathertgbot.commands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import ru.sanddev.weathertgbot.BaseCommandTest;
-import ru.sanddev.weathertgbot.bot.LanguageCode;
+import ru.sanddev.weathertgbot.bot.Language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,7 +16,7 @@ public class BreakCommandTest extends BaseCommandTest {
 
     @Override
     public void test() {
-        createUser("1", "sand", LanguageCode.en);
+        createUser("1", "sand", Language.en);
 
         Chat chat = newChat("1", "sand");
         SendMessage message;

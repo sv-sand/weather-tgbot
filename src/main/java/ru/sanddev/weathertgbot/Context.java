@@ -1,14 +1,9 @@
 package ru.sanddev.weathertgbot;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import ru.sanddev.weathertgbot.bot.Bot;
-import ru.sanddev.weathertgbot.bot.BotMessageSender;
-import ru.sanddev.weathertgbot.bot.commands.CommandsService;
-import ru.sanddev.weathertgbot.db.DataBase;
-import ru.sanddev.weathertgbot.weather.WeatherService;
 
 /**
  * @author sand <sve.snd@gmail.com>
@@ -16,25 +11,19 @@ import ru.sanddev.weathertgbot.weather.WeatherService;
  */
 
 @Component
-@Getter @Setter
-public class Context {
+public class Context implements ApplicationContextAware {
+    private static ApplicationContext context;
 
-    @Autowired
-    private DataBase db;
+    @Override
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        this.context = context;
+    }
 
-    @Autowired
-    private CommandsService commandsService;
+    public static ApplicationContext get() {
+        return context;
+    }
 
-    @Autowired
-    private WeatherService weatherService;
-
-    @Autowired
-    private Bot bot;
-
-    @Autowired
-    private BotMessageSender botMessageSender;
-
-    public Context() {
-        App.setContext(this);
+    public static <T> T getBean(Class<T> clazz) {
+        return context.getBean(clazz);
     }
 }

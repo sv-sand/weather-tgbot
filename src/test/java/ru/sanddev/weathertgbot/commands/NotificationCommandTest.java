@@ -1,11 +1,12 @@
 package ru.sanddev.weathertgbot.commands;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import ru.sanddev.weathertgbot.App;
 import ru.sanddev.weathertgbot.BaseCommandTest;
-import ru.sanddev.weathertgbot.db.entities.ScheduledNotification;
-import ru.sanddev.weathertgbot.db.entities.TgUser;
+import ru.sanddev.weathertgbot.db.scheduledcommand.ScheduledCommandRepository;
+import ru.sanddev.weathertgbot.db.scheduledcommand.ScheduledCommand;
+import ru.sanddev.weathertgbot.db.user.User;
 
 import java.sql.Time;
 
@@ -18,17 +19,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NotificationCommandTest extends BaseCommandTest {
 
+    @Autowired
+    private ScheduledCommandRepository scheduledCommandRepository;
+
     @Override
     public void test() {
         deleteAllUsers();
 
-        TgUser user = createUser("1", "sand");
+        User user = createUser("1", "sand");
 
-        ScheduledNotification notification = new ScheduledNotification();
+        ScheduledCommand notification = new ScheduledCommand();
         notification.setUser(user);
         notification.setTime(new Time(06,00,00));
-        App.getContext().getDb().getScheduledNotificationRepository()
-                .save(notification);
+        scheduledCommandRepository.save(notification);
 
         Chat chat = newChat("1", "sand");
         botSend(chat, "/notifications");
